@@ -26,6 +26,7 @@ WiFiClient net;
 PubSubClient client(net);
 
 bool statoLed; // stato del led per controllo incrociato
+uint8_t statoVentola = 0; // stato per la ventola per il controllo incrociato e il sync con la dashboard
 uint8_t status = 0; // stato per fare il controllo incrociato con la dashboard
 const char* topicLuceSub = "casa/luce/dash"; // topic per la luce (dashboard --> scheda)
 const char* topicHum = "casa/com/hum"; // topic per mandare alla dashboard l'umidità rilevata
@@ -85,11 +86,10 @@ void leggiTemp() {
   dtostrf(tmp, 6, 2, tmpString);
   client.publish(topicHum, humString);
   client.publish(topicTmp, tmpString);
-  // if(tmp > 26 || hum > 55) {
-  //   client.publish(topicVentolaInit, "onVentola");
-  // } else {
-  //   client.publish(topicVentolaInit, "offVentola");
-  // }
+  /* !!! FARE LA REGOLAZIONE DELLA VENTOLA DISTINGUENDO MANUALE E AUTOMATICO !!!*/
+  if(tmp > 26 || hum > 55 && statoVentola == 0) {
+    client.publish(topicVentolaInit, "onVentola");
+  } 
 }
 
 void reconnect() { 
