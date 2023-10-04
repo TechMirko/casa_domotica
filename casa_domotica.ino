@@ -26,6 +26,7 @@ WiFiClient net;
 PubSubClient client(net);
 
 bool statoLed; // stato del led per controllo incrociato
+uint8_t statoVentilazionne = 0;
 uint8_t statoFinestra = 0;
 uint8_t statoLuce = 0;
 uint8_t statoVentola = 0; // stato per la ventola per il controllo incrociato e il sync con la dashboard
@@ -46,9 +47,7 @@ const char* topicModeLuce = "casa/mod/luce";
 
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
-  Serial.print("Messaggio arrivato [");
-  Serial.print(topic);
-  Serial.print("] ");
+  Serial.print("Messaggio arrivato [");  Serial.print(topic);  Serial.print("] ");
 
   String comando = "";
   for (int i = 0; i < length; i++) {
@@ -152,9 +151,9 @@ void leggiTemp() {
   client.publish(topicHum, humString);
   client.publish(topicTmp, tmpString);
   if(tmp > 26 || hum > 55 && statoVentola == 0) {
-    digitalWrite(VENTOLA, HIGH);
+    ricircoloAriaOn();
   } else if(tmp < 26 || hum < 55 && statoVentola == 0) {
-    digitalWrite(VENTOLA, LOW);
+    ricircoloAriaOff();
   }
 }
 
@@ -197,6 +196,16 @@ void airQuality() {
   }
 }
 
+void ricircoloAriaOn() {
+  digitalWrite(VENTOLA, HIGH);
+  servo.write(0);
+}
+
+void ricircoloAriaOff() {
+    digitalWrite(VENTOLA, LOW);
+    servo.write(90);
+}
+
 /* ----- SETUP ----- */
 void setup() {
   Wire.begin(SDA, SCL);
@@ -208,8 +217,7 @@ void setup() {
     Serial.print(".");
   }
   Serial.println("WiFi connesso");
-  Serial.println("indirizzo IP: ");
-  Serial.println(WiFi.localIP());
+  Serial.print("Indirizzo IP: ");  Serial.println(WiFi.localIP());
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
   pinMode(LIGHT, OUTPUT);
@@ -220,7 +228,9 @@ void setup() {
     Serial.println("Errore durante l'inizializzazione del sensore SGP30");
     while (1);
   }
-  Serial.println("Inizializzazione completata. Attendi 10 secondi per i dati stabili...");
+  Serial.println("Inizializzazione SGP30 completata.");
+
+  // Inizializzazione per sincronizzare casa e dashboard
   client.publish(topicFinestraInit, "closeWindow");
   client.publish(topicLuceInit, "offLuce");
   digitalWrite(LIGHT, LOW);
