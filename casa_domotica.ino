@@ -152,8 +152,10 @@ void leggiTemp() {
   client.publish(topicHum, humString);
   client.publish(topicTmp, tmpString);
   if(tmp > 26 || hum > 55 && statoVentola == 0) {
-    client.publish(topicVentolaInit, "onVentola");
-  } 
+    digitalWrite(VENTOLA, HIGH);
+  } else if(tmp < 26 || hum < 55 && statoVentola == 0) {
+    digitalWrite(VENTOLA, LOW);
+  }
 }
 
 void reconnect() { 
@@ -190,8 +192,8 @@ void airQuality() {
     // Serial.print("eCO2: "); Serial.print(eCO2); Serial.println(" ppm");
     client.publish(topicECO2, eco2String);
     client.publish(topicTVOC, tvocString);
-  // } else {
-  //   Serial.println("Errore durante la lettura del sensore SGP30");
+  } else {
+    Serial.println("Errore durante la lettura del sensore SGP30");
   }
 }
 
@@ -214,10 +216,10 @@ void setup() {
   pinMode(VENTOLA, OUTPUT);
   servo.attach(FINESTRA);
   sgp.begin();
-  // if (!sgp.begin()) {
-  //   Serial.println("Errore durante l'inizializzazione del sensore SGP30");
-  //   while (1);
-  // }
+  if (!sgp.begin()) {
+    Serial.println("Errore durante l'inizializzazione del sensore SGP30");
+    while (1);
+  }
   Serial.println("Inizializzazione completata. Attendi 10 secondi per i dati stabili...");
   client.publish(topicFinestraInit, "closeWindow");
   client.publish(topicLuceInit, "offLuce");
