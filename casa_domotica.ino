@@ -15,8 +15,10 @@
 #define SCL 33 // per sgp30
 #define SDA 32 // per sgp30
 
-const char* ssid = "Ziro WiFi";
-const char* password = "Mirko.2005";
+const char* ssid1 = "FileHubPlus-2474";
+const char* password1 = "11111111";
+const char* ssid2 = "Ziro WiFi";
+const char* password2 = "Mirko.2005";
 const char* mqtt_server = "broker.hivemq.com";
 
 Adafruit_SGP30 sgp;
@@ -48,13 +50,19 @@ const char* topicModeLuce = "casa/mod/luce";
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
   Serial.print("Messaggio arrivato [");  Serial.print(topic);  Serial.print("] ");
-
+  String localTopic = topic;
   String comando = "";
   for (int i = 0; i < length; i++) {
     comando += (char)payload[i];
   }
 
   Serial.print("Comando = "); Serial.println(comando);
+
+  if(localTopic == "casa/com/finestra") {
+    Serial.println("Dentro");
+    int value = comando.toInt();
+    servo.write(value);
+  }
 
   // spengo la luce
   if(comando == "offLuce") {
@@ -206,20 +214,26 @@ void ricircoloAriaOff() {
     servo.write(90);
 }
 
+bool findAndConnect(const char* targetSSID, const char* targetPassword) {
+  for (int i = 0; i < WiFi.scanNetworks(); i++) {
+    if (WiFi.SSID(i) == targetSSID) {
+      Serial.println("Trovata rete: " + String(targetSSID));
+      WiFi.begin(targetSSID, targetPassword);
+      while (WiFi.status() != WL_CONNECTED) {
+        delay(1000);
+        Serial.println("Connessione in corso...");
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
 /* ----- SETUP ----- */
 void setup() {
   Wire.begin(SDA, SCL);
   dht.setup(DHTPIN, DHTTYPE);
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("WiFi connesso");
-  Serial.print("Indirizzo IP: ");  Serial.println(WiFi.localIP());
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
   pinMode(LIGHT, OUTPUT);
   pinMode(VENTOLA, OUTPUT);
   servo.attach(FINESTRA);
@@ -230,7 +244,48 @@ void setup() {
   }
   Serial.println("Inizializzazione SGP30 completata.");
 
-  // Inizializzazione per sincronizzare casa e dashboard
+ // Scansione delle reti Wi-Fi circostanti
+  Serial.println("Scansione reti Wi-Fi...");
+  int numNetworks = WiFi.scanNetworks();
+
+  if (numNetworks == 0) {
+    Serial.println("Nessuna rete Wi-Fi rilevata.");
+    while (1) {
+      delay(1000);
+    }
+  } else {
+    Serial.println(numNetworks + " reti Wi-Fi rilevate.");
+
+    // Cerca e connettiti a una delle due reti disponibili
+    if (findAndConnect(ssid1, password1) || findAndConnect(ssid2, password2)) {
+      Serial.println("Connessione Wi-Fi riuscita.");
+      
+      // Connessione al broker MQTT
+      client.setServer(mqtt_server, 1883);
+      client.setCallback(callback);
+
+      while (!client.connected()) {
+        Serial.println("Connessione a MQTT...");
+        if (client.connect("ESP32Client")) {
+          Serial.println("Connesso a MQTT.");
+          client.subscribe(topicLuceSub);
+          client.subscribe(topicVentola);
+          client.subscribe(topicFinestra);
+          client.subscribe(topicModVentola);
+          client.subscribe(topicModFinestra);
+          client.subscribe(topicModeLuce);
+        } else {
+          Serial.println("Connessione a MQTT fallita.");
+        }
+      }
+    } else {
+      Serial.println("Connessione Wi-Fi fallita per entrambe le reti.");
+      while (1) {
+        delay(1000);
+      }
+    }
+  }
+  reconnect();
   // client.publish(topicFinestraInit, "closeWindow");
   // client.publish(topicLuceInit, "offLuce");
   // digitalWrite(VENTOLA, LOW);
