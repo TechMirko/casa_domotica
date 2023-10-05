@@ -15,7 +15,7 @@
 #define SCL 33 // per sgp30
 #define SDA 32 // per sgp30
 
-const char* ssid = "Ziro";
+const char* ssid = "Ziro WiFi";
 const char* password = "Mirko.2005";
 const char* mqtt_server = "broker.hivemq.com";
 
@@ -57,7 +57,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   Serial.print("Comando = "); Serial.println(comando);
 
   // spengo la luce
-  if(comando == "offLuce" && statoLuce == 1) {
+  if(comando == "offLuce") {
     digitalWrite(LIGHT, LOW);
     statoLed = false;
   } else if(comando == "offLuce" && statoLuce == 0) {
@@ -65,7 +65,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   } 
 
   // accendo la luce
-  if(comando == "onLuce" && statoLuce == 1) {
+  if(comando == "onLuce") {
     digitalWrite(LIGHT, HIGH);
     statoLed = true;
   } else if(comando == "onLuce" && statoLuce == 0) {
@@ -73,33 +73,33 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   }
 
   // apro a finestra
-  if(comando == "openWindow" && statoFinestra == 1) {
+  if(comando == "openWindow") {
     servo.write(0);
-    Serial.println("Finestra aperta (finestra MANUALE)");
+    // Serial.println("Finestra aperta (finestra MANUALE)");
   } else if(comando == "openWindow" && statoFinestra == 0) {
     Serial.println("Comando ignorato, finestra in automatico.");
   }
 
   // chiudo la finestra
-  if(comando == "closeWindow" && statoFinestra == 1) {
+  if(comando == "closeWindow") {
     servo.write(90);
-    Serial.println("Finestra chiusa (finestra MANUALE)");
-  }  else if(comando == "closeWindow" && statoFinestra == 0) {
+    // Serial.println("Finestra chiusa (finestra MANUALE)");
+  } else if(comando == "closeWindow" && statoFinestra == 0) {
     Serial.println("Comando ignorato, finestra in automatico.");
   }
 
   // accendo la ventola SE lo stato della ventola è in manuale
-  if(comando == "onVentola" && statoVentola == 1) {
+  if(comando == "onVentola") {
     digitalWrite(VENTOLA, HIGH);
-    Serial.println("Ventola accesa (ventola MANUALE)");
+    // Serial.println("Ventola accesa (ventola MANUALE)");
   } else if(comando == "onVentola" && statoVentola == 0) {
     Serial.println("Comando ignorato, ventola in automatico.");
   }
 
   // spengo la ventola SE lo stato della ventola è in manuale
-  if(comando == "offVentola" && statoVentola == 1) {
+  if(comando == "offVentola") {
     digitalWrite(VENTOLA, LOW);
-    Serial.println("Ventola spenta (ventola MANUALE)");
+    // Serial.println("Ventola spenta (ventola MANUALE)");
   } else if(comando == "offVentola" && statoVentola == 0) {
     Serial.println("Comando ignorato, ventola in automatico.");
   }
@@ -150,11 +150,11 @@ void leggiTemp() {
   dtostrf(tmp, 6, 2, tmpString);
   client.publish(topicHum, humString);
   client.publish(topicTmp, tmpString);
-  if(tmp > 26 || hum > 55 && statoVentola == 0) {
-    ricircoloAriaOn();
-  } else if(tmp < 26 || hum < 55 && statoVentola == 0) {
-    ricircoloAriaOff();
-  }
+  // if(tmp > 26 || hum > 55 && statoVentola == 0) {
+  //   ricircoloAriaOn();
+  // } else if(tmp < 26 || hum < 55 && statoVentola == 0) {
+  //   ricircoloAriaOff();
+  // }
 }
 
 void reconnect() { 
@@ -231,10 +231,11 @@ void setup() {
   Serial.println("Inizializzazione SGP30 completata.");
 
   // Inizializzazione per sincronizzare casa e dashboard
-  client.publish(topicFinestraInit, "closeWindow");
-  client.publish(topicLuceInit, "offLuce");
-  digitalWrite(LIGHT, LOW);
-  servo.write(90);
+  // client.publish(topicFinestraInit, "closeWindow");
+  // client.publish(topicLuceInit, "offLuce");
+  // digitalWrite(VENTOLA, LOW);
+  // digitalWrite(LIGHT, LOW);
+  // servo.write(90);
 }
 
 /* ----- LOOP ----- */
