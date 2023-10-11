@@ -158,11 +158,14 @@ void leggiTemp() {
   dtostrf(tmp, 6, 2, tmpString);
   client.publish(topicHum, humString);
   client.publish(topicTmp, tmpString);
-  // if(tmp > 26 || hum > 55 && statoVentola == 0) {
-  //   ricircoloAriaOn();
-  // } else if(tmp < 26 || hum < 55 && statoVentola == 0) {
-  //   ricircoloAriaOff();
-  // }
+  if(tmp > 26 || hum > 55 && statoVentola == 1) {
+    digitalWrite(VENTOLA, HIGH);
+    servo.write(0);
+  } 
+  if(tmp < 28 || hum < 55 && statoVentola == 1) {
+    digitalWrite(VENTOLA, LOW);
+    servo.write(90);
+  }
 }
 
 void reconnect() { 
@@ -204,15 +207,6 @@ void airQuality() {
   }
 }
 
-void ricircoloAriaOn() {
-  digitalWrite(VENTOLA, HIGH);
-  servo.write(0);
-}
-
-void ricircoloAriaOff() {
-    digitalWrite(VENTOLA, LOW);
-    servo.write(90);
-}
 
 bool findAndConnect(const char* targetSSID, const char* targetPassword) {
   for (int i = 0; i < WiFi.scanNetworks(); i++) {
