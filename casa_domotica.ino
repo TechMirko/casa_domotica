@@ -158,14 +158,33 @@ void leggiTemp() {
   dtostrf(tmp, 6, 2, tmpString);
   client.publish(topicHum, humString);
   client.publish(topicTmp, tmpString);
-  if(tmp > 26 || hum > 55 && statoVentola == 1) {
+  if(tmp > 26 && statoVentola == 0) {
     digitalWrite(VENTOLA, HIGH);
-    servo.write(0);
   } 
-  if(tmp < 28 || hum < 55 && statoVentola == 1) {
+
+  if(tmp < 28 && statoVentola == 0) {
     digitalWrite(VENTOLA, LOW);
+  }
+
+  if(tmp > 26 && statoFinestra == 0) {
+    servo.write(0);
+  }
+
+  if(tmp < 28 && statoFinestra == 0) {
     servo.write(90);
   }
+}
+
+void luce() {
+  int l = map(analogRead(35), 0, 4095, 0, 1000);
+  Serial.print("Luce = "); Serial.println(l);
+  if(l > 500 && statoLuce == 0) {
+    digitalWrite(LIGHT, HIGH);
+  } 
+
+  if(l < 500 && statoLuce == 0) {
+    digitalWrite(LIGHT, LOW);
+  }  
 }
 
 void reconnect() { 
@@ -289,6 +308,7 @@ void setup() {
 
 /* ----- LOOP ----- */
 void loop() {
+  luce();
   leggiTemp(); 
   airQuality();
   // rete wifi
