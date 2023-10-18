@@ -233,8 +233,8 @@ bool findAndConnect(const char* targetSSID, const char* targetPassword) {
       Serial.println("Trovata rete: " + String(targetSSID));
       WiFi.begin(targetSSID, targetPassword);
       while (WiFi.status() != WL_CONNECTED) {
-        delay(1000);
-        Serial.println("Connessione in corso...");
+        delay(250);
+        Serial.print(".");
       }
       return true;
     }
