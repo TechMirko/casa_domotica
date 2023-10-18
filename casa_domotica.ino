@@ -227,21 +227,6 @@ void airQuality() {
 }
 
 
-bool findAndConnect(const char* targetSSID, const char* targetPassword) {
-  for (int i = 0; i < WiFi.scanNetworks(); i++) {
-    if (WiFi.SSID(i) == targetSSID) {
-      Serial.println("Trovata rete: " + String(targetSSID));
-      WiFi.begin(targetSSID, targetPassword);
-      while (WiFi.status() != WL_CONNECTED) {
-        delay(250);
-        Serial.print(".");
-      }
-      return true;
-    }
-  }
-  return false;
-}
-
 /* ----- SETUP ----- */
 void setup() {
   Wire.begin(SDA, SCL);
@@ -256,49 +241,18 @@ void setup() {
     while (1);
   }
   Serial.println("Inizializzazione SGP30 completata.");
-
- // Scansione delle reti Wi-Fi circostanti
-  Serial.println("Scansione reti Wi-Fi...");
-  int numNetworks = WiFi.scanNetworks();
-
-  if (numNetworks == 0) {
-    Serial.println("Nessuna rete Wi-Fi rilevata.");
-    while (1) {
-      delay(1000);
-    }
-  } else {
-    Serial.println(numNetworks + " reti Wi-Fi rilevate.");
-
-    // Cerca e connettiti a una delle due reti disponibili
-    if (findAndConnect(ssid1, password1) || findAndConnect(ssid2, password2)) {
-      Serial.println("Connessione Wi-Fi riuscita.");
-      
-      // Connessione al broker MQTT
-      client.setServer(mqtt_server, 1883);
-      client.setCallback(callback);
-
-      while (!client.connected()) {
-        Serial.println("Connessione a MQTT...");
-        if (client.connect("ESP32Client")) {
-          Serial.println("Connesso a MQTT.");
-          client.subscribe(topicLuceSub);
-          client.subscribe(topicVentola);
-          client.subscribe(topicFinestra);
-          client.subscribe(topicModVentola);
-          client.subscribe(topicModFinestra);
-          client.subscribe(topicModeLuce);
-        } else {
-          Serial.println("Connessione a MQTT fallita.");
-        }
-      }
-    } else {
-      Serial.println("Connessione Wi-Fi fallita per entrambe le reti.");
-      while (1) {
-        delay(1000);
-      }
-    }
+  WiFi.begin(ssid2, password2);
+  Serial.printf("Connessione a %s in corso", ssid2);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
-  reconnect();
+  Serial.println("WiFi connesso");
+  Serial.print("Indirizzo IP: ");
+  Serial.println(WiFi.localIP());
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
+  // reconnect();
   // client.publish(topicFinestraInit, "closeWindow");
   // client.publish(topicLuceInit, "offLuce");
   // digitalWrite(VENTOLA, LOW);
