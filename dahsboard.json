@@ -1,0 +1,604 @@
+[
+    {
+        "id": "e79fd98309ac982b",
+        "type": "tab",
+        "label": "Casa domotica",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c88ba2d40955b767",
+        "type": "ui_switch",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "label": "Luce",
+        "tooltip": "",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 7,
+        "width": "7",
+        "height": "1",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "onLuce",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "offLuce",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 590,
+        "y": 140,
+        "wires": [
+            [
+                "5dc78d3e28eb373e"
+            ]
+        ]
+    },
+    {
+        "id": "5dc78d3e28eb373e",
+        "type": "mqtt out",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/luce/dash",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "a68fe0f21e240d68",
+        "x": 780,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e7aabd1b95d0b84e",
+        "type": "mqtt in",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/com/hum",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a68fe0f21e240d68",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 200,
+        "wires": [
+            [
+                "df0270deeba8f972"
+            ]
+        ]
+    },
+    {
+        "id": "df0270deeba8f972",
+        "type": "ui_text",
+        "z": "e79fd98309ac982b",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 1,
+        "width": "6",
+        "height": "1",
+        "name": "",
+        "label": "Umidità in %: ",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 650,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "21ea903966173edf",
+        "type": "mqtt in",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/com/tmp",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a68fe0f21e240d68",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 430,
+        "y": 280,
+        "wires": [
+            [
+                "b1b513c7539bbfd3"
+            ]
+        ]
+    },
+    {
+        "id": "b1b513c7539bbfd3",
+        "type": "ui_text",
+        "z": "e79fd98309ac982b",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 1,
+        "width": "6",
+        "height": "1",
+        "name": "",
+        "label": "Temperatura in °C:  ",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 670,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "1be765afc6ed4aef",
+        "type": "mqtt out",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/com/finestra",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "a68fe0f21e240d68",
+        "x": 830,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "909fcc659b425adc",
+        "type": "mqtt in",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/com/eco2",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a68fe0f21e240d68",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 400,
+        "wires": [
+            [
+                "237020a8c43a2f79"
+            ]
+        ]
+    },
+    {
+        "id": "237020a8c43a2f79",
+        "type": "ui_text",
+        "z": "e79fd98309ac982b",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 1,
+        "width": "6",
+        "height": "1",
+        "name": "",
+        "label": "eCO2 in ppm: ",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "Arial,Arial,Helvetica,sans-serif",
+        "fontSize": "",
+        "color": "#ff8040",
+        "x": 660,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "ae418107501ccfea",
+        "type": "mqtt in",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/com/tvoc",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a68fe0f21e240d68",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 430,
+        "y": 460,
+        "wires": [
+            [
+                "a2af2f423d8af32c"
+            ]
+        ]
+    },
+    {
+        "id": "a2af2f423d8af32c",
+        "type": "ui_text",
+        "z": "e79fd98309ac982b",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 1,
+        "width": "6",
+        "height": "1",
+        "name": "",
+        "label": "TVOC in ppb:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 660,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "3f1b2ee93a9e608a",
+        "type": "mqtt in",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/init/luce",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a68fe0f21e240d68",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 430,
+        "y": 140,
+        "wires": [
+            [
+                "c88ba2d40955b767"
+            ]
+        ]
+    },
+    {
+        "id": "c903eb5701147c92",
+        "type": "mqtt in",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/init/finesrta",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a68fe0f21e240d68",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 340,
+        "wires": [
+            [
+                "af816002e646ff32"
+            ]
+        ]
+    },
+    {
+        "id": "86ac0f4f367fa1d6",
+        "type": "ui_switch",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "label": "Ventilazione",
+        "tooltip": "",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 6,
+        "width": "7",
+        "height": "1",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "onVentola",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "offVentola",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 530,
+        "y": 520,
+        "wires": [
+            [
+                "9cbd04b1855d6c9c"
+            ]
+        ]
+    },
+    {
+        "id": "9cbd04b1855d6c9c",
+        "type": "mqtt out",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/com/ventilazione",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "a68fe0f21e240d68",
+        "x": 760,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "75287cb919680709",
+        "type": "mqtt in",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/com/ventola",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "a68fe0f21e240d68",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 340,
+        "y": 520,
+        "wires": [
+            [
+                "86ac0f4f367fa1d6"
+            ]
+        ]
+    },
+    {
+        "id": "f2697794fe98bf19",
+        "type": "mqtt out",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/mod/ventola",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "a68fe0f21e240d68",
+        "x": 730,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "d9291c86f4623aa5",
+        "type": "mqtt out",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/mod/finestra",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "a68fe0f21e240d68",
+        "x": 730,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "2a3e672dc635c691",
+        "type": "ui_dropdown",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "label": "Modalità finestra:",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 8,
+        "width": "14",
+        "height": "1",
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Manuale",
+                "value": "manualFinestra",
+                "type": "str"
+            },
+            {
+                "label": "Automatica",
+                "value": "autoFinestra",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 490,
+        "y": 20,
+        "wires": [
+            [
+                "d9291c86f4623aa5"
+            ]
+        ]
+    },
+    {
+        "id": "5e662f1b2bc34c23",
+        "type": "ui_dropdown",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "label": "Modalità ventola:",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 7,
+        "width": "14",
+        "height": "1",
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Manuale",
+                "value": "manualVentola",
+                "type": "str"
+            },
+            {
+                "label": "Automatica",
+                "value": "autoVentola",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 490,
+        "y": 80,
+        "wires": [
+            [
+                "f2697794fe98bf19"
+            ]
+        ]
+    },
+    {
+        "id": "1eda55907c6df721",
+        "type": "ui_dropdown",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "label": "Modalità luce:",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 9,
+        "width": "14",
+        "height": "1",
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Manuale",
+                "value": "manualLuce",
+                "type": "str"
+            },
+            {
+                "label": "Automatica",
+                "value": "autoLuce",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 420,
+        "y": 580,
+        "wires": [
+            [
+                "3e2970bf74cde1d3"
+            ]
+        ]
+    },
+    {
+        "id": "3e2970bf74cde1d3",
+        "type": "mqtt out",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "topic": "casa/mod/luce",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "a68fe0f21e240d68",
+        "x": 660,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "af816002e646ff32",
+        "type": "ui_slider",
+        "z": "e79fd98309ac982b",
+        "name": "",
+        "label": "Finestra",
+        "tooltip": "",
+        "group": "fb1dd8ac6cf6a1f1",
+        "order": 9,
+        "width": "7",
+        "height": "1",
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "90",
+        "step": 1,
+        "className": "",
+        "x": 640,
+        "y": 340,
+        "wires": [
+            [
+                "1be765afc6ed4aef"
+            ]
+        ]
+    },
+    {
+        "id": "fb1dd8ac6cf6a1f1",
+        "type": "ui_group",
+        "name": "Test domotico",
+        "tab": "798d20a33712df4e",
+        "order": 1,
+        "disp": true,
+        "width": "14",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a68fe0f21e240d68",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "798d20a33712df4e",
+        "type": "ui_tab",
+        "name": "Casa domotica",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
