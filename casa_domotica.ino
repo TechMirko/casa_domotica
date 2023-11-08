@@ -15,10 +15,8 @@
 #define SCL 33 // per sgp30
 #define SDA 32 // per sgp30
 
-const char* ssid1 = "FileHubPlus-2474";
-const char* password1 = "11111111";
-const char* ssid2 = "Ziro WiFi";
-const char* password2 = "Mirko.2005";
+const char* ssid = "**********************"; // Nome del wifi a cui vuoi connetterti
+const char* password = "***************"; // Password el wifi 
 const char* mqtt_server = "broker.hivemq.com";
 
 Adafruit_SGP30 sgp;
@@ -39,13 +37,13 @@ const char* topicTmp = "casa/com/tmp"; // topic per mandare alla dashboard la te
 const char* topicFinestra = "casa/com/finestra"; // topic per ricevere il comando per aprire la finestra
 const char* topicFinestraInit = "casa/init/finesrta"; // topic per resettare la finestra a chiusa all'avvio del programma per syncare dashboard e board fisica
 const char* topicLuceInit = "casa/init/luce"; // topic per resettare la luce a chiusa all'avvio del programma per syncare dashboard e board fisica
-const char* topicECO2 = "casa/com/eco2";
-const char* topicTVOC = "casa/com/tvoc";
-const char* topicVentola = "casa/com/ventilazione";
-const char* topicVentolaInit = "casa/com/ventola";
-const char* topicModVentola = "casa/mod/ventola";
-const char* topicModFinestra = "casa/mod/finestra";
-const char* topicModeLuce = "casa/mod/luce";
+const char* topicECO2 = "casa/com/eco2"; // topic per mandare i dati dell'SGP30 
+const char* topicTVOC = "casa/com/tvoc"; // topic per mandare i dati dell'SGP30 
+const char* topicVentola = "casa/com/ventilazione"; // topic per il comando forzato della ventilazione
+const char* topicVentolaInit = "casa/com/ventola"; // topic per inizializzazione ventola
+const char* topicModVentola = "casa/mod/ventola"; // topic per selezionare la modalità di funzionamento della ventola
+const char* topicModFinestra = "casa/mod/finestra"; // topic per selezionare la modalità di funzionamento della finestra
+const char* topicModeLuce = "casa/mod/luce"; // topic per selezionare la modalità di funzionamento della luce
 
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
@@ -241,7 +239,7 @@ void setup() {
     while (1);
   }
   Serial.println("Inizializzazione SGP30 completata.");
-  WiFi.begin(ssid2, password2);
+  WiFi.begin(ssid, password);
   Serial.printf("Connessione a %s in corso", ssid2);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
