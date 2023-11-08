@@ -240,7 +240,7 @@ void setup() {
   }
   Serial.println("Inizializzazione SGP30 completata.");
   WiFi.begin(ssid, password);
-  Serial.printf("Connessione a %s in corso", ssid2);
+  Serial.printf("Connessione a %s in corso", ssid);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
